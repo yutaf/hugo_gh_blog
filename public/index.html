@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+  <link href="http://gmpg.org/xfn/11" rel="profile">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+  <title> my new hugo site &middot; my new hugo site </title>
+
+  
+  <link rel="stylesheet" href="http://localhost:1313/css/poole.css">
+  <link rel="stylesheet" href="http://localhost:1313/css/syntax.css">
+  <link rel="stylesheet" href="http://localhost:1313/css/hyde.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Sans:400,400italic,700|Abril+Fatface">
+
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/apple-touch-icon-144-precomposed.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  
+  <link href="http://localhost:1313/index.xml" rel="alternate" type="application/rss+xml" title="my new hugo site" />
+</head>
+
+<body>
+
+<div class="sidebar">
+  <div class="container sidebar-sticky">
+    <div class="sidebar-about">
+      <h1>my new hugo site</h1>
+      <p class="lead">
+      An elegant open source and mobile first theme for <a href="http://hugo.spf13.com">hugo</a> made by <a href="http://twitter.com/mdo">@mdo</a>. Originally made for Jekyll.
+      </p>
+    </div>
+
+    <ul class="sidebar-nav">
+      <li><a href="/">Home</a> </li>
+      
+    </ul>
+
+    <p>&copy; 2015. All rights reserved. </p>
+  </div>
+</div>
+
+
+    <div class="content container">
+<div class="posts">
+
+      
+  <div class="post">
+    <h1 class="post-title">
+      <a href="http://localhost:1313/phpbrew-memo/">
+        phpbrew memo
+      </a>
+    </h1>
+
+    <span class="post-date">Tue, Feb 17, 2015</span>
+
+    
+
+<p>ローカル開発環境に phpenv + php-build を使っていたが、<a href="https://github.com/phpbrew/phpbrew">phpbrew</a> のほうが簡単そうだったので移行した。</p>
+
+<p><strong>environment</strong></p>
+
+<ul>
+<li>osx 10.9.5</li>
+</ul>
+
+<h2 id="requirement:a243102e0194a1a90c0e0b12d72d5bbe">Requirement</h2>
+
+<p><a href="https://github.com/phpbrew/phpbrew/wiki/Requirement">https://github.com/phpbrew/phpbrew/wiki/Requirement</a></p>
+
+<p>phpbrew を利用するには php が必要。<br />
+osx はデフォルトで php がインストールされているので、osx ユーザーにはいいと思う。</p>
+
+<h2 id="インストール:a243102e0194a1a90c0e0b12d72d5bbe">インストール</h2>
+
+<pre><code>$ curl -L -O https://github.com/phpbrew/phpbrew/raw/master/phpbrew
+$ chmod +x phpbrew
+$ mv phpbrew /usr/local/bin/
+</code></pre>
+
+<h2 id="configure-option-の設定と-php-のインストール:a243102e0194a1a90c0e0b12d72d5bbe">configure option の設定と php のインストール</h2>
+
+<p>variants という仕組みを利用して configure option を設定し、インストールする。</p>
+
+<pre><code>$ phpbrew install 5.3.10 +pdo +mysql +pgsql +apxs2=/usr/bin/apxs2
+</code></pre>
+
+<p>通常の configure option の記述をする場合</p>
+
+<pre><code>$ phpbrew install 5.3.10 +mysql +sqlite -- \
+    --enable-ftp --apxs2=/opt/local/apache2/bin/apxs
+</code></pre>
+
+<h4 id="ファイルによる-configure-option-の設定:a243102e0194a1a90c0e0b12d72d5bbe">ファイルによる configure option の設定</h4>
+
+<p>yamlファイルで独自の variants を設定できる。</p>
+
+<p><a href="https://github.com/phpbrew/phpbrew/wiki/Setting-up-Configuration">https://github.com/phpbrew/phpbrew/wiki/Setting-up-Configuration</a></p>
+
+<p>config.yaml</p>
+
+<pre><code class="language-yaml:config.yaml">variants:
+  dev:
+    bcmath:
+    mbstring:
+    intl:
+    icu:
+      - --with-icu-dir=/usr/local/opt/icu4c
+    gettext:
+      - --with-gettext=/usr/local/opt/gettext
+    pcre:
+    readline:
+    xml:
+      - --with-libxml-dir=/usr/local/opt/libxml2
+    soap:
+    zlib:
+      - --with-zlib=/usr/local/opt/zlib
+      - --with-zlib-dir=/usr/local/opt/zlib
+    gd:
+      - --with-gd
+      - --with-jpeg-dir=/usr/local/opt/jpeg
+      - --with-png-dir=/usr/local/opt/libpng
+      - --with-freetype-dir=/usr/local/opt/freetype
+      - --enable-gd-native-ttf
+      - --enable-gd-jis-conv
+    openssl:
+    mcrypt:
+    curl:
+    mysql:
+    pdo:
+    my-exif:
+      - --enable-exif
+    my-config-file-path:
+      - --with-config-file-path=/Users/yutaf/Sync/www/php.ini
+extensions:
+  dev:
+    xdebug: stable
+</code></pre>
+
+<p>yamlファイルを作成後、以下のコマンドを実行する。</p>
+
+<pre><code>$ phpbrew init -c=/path/to/config.yaml
+</code></pre>
+
+<p>ファイルに記述されている <code>+dev</code> variants を使用できるようになる。</p>
+
+<pre><code>$ phpbrew -d install 5.4.36 +dev
+</code></pre>
+
+<h4 id="最終的に辿り着いた設定方法:a243102e0194a1a90c0e0b12d72d5bbe">最終的に辿り着いた設定方法</h4>
+
+<pre><code>$ phpbrew -d install 5.4.36 +neutral +apxs2=/opt/apache2.2.29/bin/apxs +dev
+</code></pre>
+
+<p><code>+neutral</code> を指定しないと <code>--disable-all</code> 等のオプションが自動的に設定される。<br />
+<code>--disable-all</code> は phpのデフォルトで有効な json や xml モジュール等が無効になるので、これらの関数が動かなくなり困った。</p>
+
+<p><code>'+apxs2'</code> は apache の php モジュールをバージョン毎に管理する為に必須(後述)。</p>
+
+<h2 id="php-のバージョン切り替え:a243102e0194a1a90c0e0b12d72d5bbe">php のバージョン切り替え</h2>
+
+<pre><code>$ phpbrew switch php-5.4.36
+</code></pre>
+
+<h2 id="xdebug-インストール:a243102e0194a1a90c0e0b12d72d5bbe">xdebug インストール</h2>
+
+<p>上の yaml ファイルに記述してあるので、以下でインストールできる。</p>
+
+<pre><code>$ phpbrew ext install +dev
+</code></pre>
+
+<h2 id="apache-のphpモジュール切り替え:a243102e0194a1a90c0e0b12d72d5bbe">apache のphpモジュール切り替え</h2>
+
+<p>variants の <code>apxs2</code> を設定すると各バージョンごとにモジュールを保存し、
+httpd.conf に <code>LoadModule php5_module ...</code> の記述がされる。</p>
+
+<p><a href="https://github.com/phpbrew/phpbrew/wiki/Cookbook#apache2-support">https://github.com/phpbrew/phpbrew/wiki/Cookbook#apache2-support</a></p>
+
+<p>ただし、その際 conf と modules フォルダのパーミッションを 777 に変更するよう言われる。</p>
+
+<pre><code>$ phpbrew install 5.3.29 +apxs2=/opt/apache2.2.29/bin/apxs
+$ phpbrew install 5.4.36 +apxs2=/opt/apache2.2.29/bin/apxs
+</code></pre>
+
+<ul>
+<li>作成されるモジュール</li>
+</ul>
+
+<pre><code>/opt/apache2.2.29/modules/libphp5.3.29.so
+/opt/apache2.2.29/modules/libphp5.4.36.so
+
+</code></pre>
+
+<ul>
+<li>httpd.conf</li>
+</ul>
+
+<pre><code class="language-apacheconf:/opt/apache2.2.29/conf/httpd.conf">...
+
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule php5_module        modules/libphp5.4.36.so
+LoadModule php5_module        modules/libphp5.3.29.so
+
+...
+</code></pre>
+
+<h5 id="バージョン切り替えの方法:a243102e0194a1a90c0e0b12d72d5bbe">バージョン切り替えの方法</h5>
+
+<p>httpd.conf で使用するバージョンのモジュール以外をコメントアウトして apache を再起動する</p>
+
+<pre><code class="language-apacheconf:/opt/apache2.2.29/conf/httpd.conf">...
+
+LoadModule rewrite_module modules/mod_rewrite.so
+LoadModule php5_module        modules/libphp5.4.36.so
+#LoadModule php5_module        modules/libphp5.3.29.so
+
+...
+</code></pre>
+
+<pre><code>$ sudo apachectl graceful
+</code></pre>
+
+<h2 id="感想:a243102e0194a1a90c0e0b12d72d5bbe">感想</h2>
+
+<p>pcre ライブラリが apache のものとの衝突を気にしないでビルドできるのはいいと思った。<br />
+面倒なところが多いが、とりあえず動いているので使っていこうと思う。</p>
+
+  </div>
+  
+</div>
+</div>
+
+  </body>
+</html>
