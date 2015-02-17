@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>my new hugo site</title>
-    <link>http://localhost:1313/</link>
+    <link>http://yutaf.github.io/</link>
     <description>Recent content on my new hugo site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -10,14 +10,14 @@
     
     
     <lastBuildDate>Tue, 17 Feb 2015 12:32:23 JST</lastBuildDate>
-    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://yutaf.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>phpbrew memo</title>
-      <link>http://localhost:1313/phpbrew-memo/</link>
+      <link>http://yutaf.github.io/phpbrew-memo/</link>
       <pubDate>Tue, 17 Feb 2015 12:32:23 JST</pubDate>
       
-      <guid>http://localhost:1313/phpbrew-memo/</guid>
+      <guid>http://yutaf.github.io/phpbrew-memo/</guid>
       <description>
 
 &lt;p&gt;ローカル開発環境に phpenv + php-build を使っていたが、&lt;a href=&#34;https://github.com/phpbrew/phpbrew&#34;&gt;phpbrew&lt;/a&gt; のほうが簡単そうだったので移行した。&lt;/p&gt;
